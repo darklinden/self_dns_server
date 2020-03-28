@@ -1,0 +1,16 @@
+/bin/echo "
+SHELL=/bin/sh
+flag=$(/bin/pwd)/flag_refresh_dnsmasq
+if [ -f \$flag ]; then
+	# echo \$flag
+	/bin/rm -rf \$flag
+	/usr/local/bin/brew services restart dnsmasq
+	/bin/echo 'flag exist, restart dnsmasq'
+else
+	/bin/echo 'no flag'
+fi">cron_run
+
+/bin/echo "* * * * * $(/bin/pwd)/cron_run
+@reboot ifconfig lo0 alias 127.0.0.2 up">cron.txt
+
+sudo crontab cron.txt
